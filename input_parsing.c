@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   input_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkhandaq <mkhandaq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 12:03:44 by mkhandaq          #+#    #+#             */
-/*   Updated: 2026/04/30 12:19:47 by mkhandaq         ###   ########.fr       */
+/*   Updated: 2026/05/16 21:53:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.c"
+#include "philo.h"
 
-static long long	ft_atoi(const char *nptr)
+static long long	ft_atol(const char *nptr)
 {
 	int	sign;
 	long long	result;
@@ -21,33 +21,28 @@ static long long	ft_atoi(const char *nptr)
 	sign = 1;
 	result = 0;
 	i = 0;
-	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
-		i++;
-	if (nptr[i] == '-' || nptr[i] == '+')
-	{
-		if (nptr[i] == '-')
-			sign = -1;
-		i++;
-	}
+	if (result > (2147483647 - (nptr[i] - '0')) / 10)
+		return (-1);
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
+		if (!(nptr[i] >= '0' && nptr[i] <= '9') || result > 2147483647)
+			return -1;
 		result = result * 10 + (nptr[i] - '0');
 		i++;
-        if (!(nptr[i] >= '0' && nptr[i] <= '9') || result > 2147483647)
-            return -1;
 	}
 	return (result * sign);
 }
 
-int is_valid(char **argv)
+int is_valid(char **argv, int argc)
 {
 	int	i;
 
-    i = 0;
-	while(argv && argv[i])
+    i = 1;
+	while(i < argc)
 	{
-		if (ft_atio(argv[i]) <= 0 || (ft_atio(argv[i]) > 2147483647))
+		if (ft_atol(argv[i]) <= 0)
 			return 0;
+		i++;
 	}
 	return 1;
 }
