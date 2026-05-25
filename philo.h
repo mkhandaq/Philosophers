@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 11:35:23 by mkhandaq          #+#    #+#             */
-/*   Updated: 2026/05/23 02:28:00 by marvin           ###   ########.fr       */
+/*   Updated: 2026/05/25 12:48:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include <string.h>
 
 typedef struct s_data
 {
@@ -46,5 +47,21 @@ typedef struct s_philo
     pthread_t           thread;
     t_data              *data;
 }   t_philo;
+
+
+int		init_data(t_data *data);
+void		nuke(t_data *data);
+
+long		get_time(void);
+void		print_status(t_philo *philo, char *msg);
+int			is_dead(t_data *data);
+int			death_check(t_data *data);
+int			did_eat_all(t_data *data);
+
+void		*routine(void *arg);
+void		*monitor_routine(void *arg);
+
+void		set_data(t_data *data, char **argv);
+int			is_valid(char **argv, int argc);
 
 #endif

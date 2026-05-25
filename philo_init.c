@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 11:55:57 by mkhandaq          #+#    #+#             */
-/*   Updated: 2026/05/23 03:08:33 by marvin           ###   ########.fr       */
+/*   Updated: 2026/05/23 14:22:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_forks(t_data *data)
+static int	init_forks(t_data *data)
 {
 	int	i;
 
@@ -33,7 +33,7 @@ int	init_forks(t_data *data)
 	return 1;
 }
 
-int	init_philos(t_data *data)
+static int	init_philos(t_data *data)
 {
 	int	i;
 

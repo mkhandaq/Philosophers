@@ -6,33 +6,58 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 11:56:05 by mkhandaq          #+#    #+#             */
-/*   Updated: 2026/05/23 03:01:09 by marvin           ###   ########.fr       */
+/*   Updated: 2026/05/25 12:08:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	set_data(t_data *data, char **argv)
+static void	creat_threads(t_data *data, pthread_t *monitor)
 {
-	data->num_philos = (int)ft_atol(argv[1]);
-	data->time_to_die = ft_atol(argv[2]);
-	data->time_to_eat = ft_atol(argv[3]);
-	data->time_to_sleep = ft_atol(argv[4]);
-	if (argv[5])
-		data->must_eat_count = ft_atol(argv[5]);
-	else
-		data->must_eat_count = -1;
+	int	i;
+
+	i = 0;
+	while(i < data->num_philos)
+	{
+		pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]);
+		i++;
+	}
+	pthread_create(monitor, NULL, monitor_routine, data);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data data;
+	t_data 		data;
+	pthread_t	monitor;
+	int			i;
 
+	memset(&data, 0, sizeof(t_data));
 	if (argc > 6 || argc < 5 || !is_valid(argv, argc))
 	{
 		printf("Invalid input\n");
 		return (1);
 	}
 	set_data(&data, argv);
-	return (0);
+	if (!init_data(&data))
+	{
+		nuke(&data);
+		return (1);
+	}
+	data.start_time = get_time();
+	i = 0;
+	while (i < data.num_philos)
+	{
+		data.philos[i].last_meal_time = data.start_time;
+		i++;
+	}
+	creat_threads(&data, &monitor);
+	i = 0;
+	while (i < data.num_philos)
+	{
+		pthread_join(data.philos[i].thread, NULL);
+		i++;
+	}
+	pthread_join(monitor, NULL);
+	nuke(&data);
+	return 0;
 }
