@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mkhandaq <mkhandaq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 12:03:44 by mkhandaq          #+#    #+#             */
-/*   Updated: 2026/05/25 11:36:32 by marvin           ###   ########.fr       */
+/*   Updated: 2026/05/26 14:09:58 by mkhandaq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static long	ft_atol(const char *nptr)
 
 	result = 0;
 	i = 0;
+	if(nptr[i] == '+')
+		i++;
 	while (nptr[i])
 	{
 		if (nptr[i] < '0' || nptr[i] > '9')

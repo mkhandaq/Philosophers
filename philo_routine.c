@@ -12,16 +12,25 @@
 
 #include "philo.h"
 
+static void    usleep_but_better(long long ms)
+{
+	long long start;
+
+	start = get_time();
+	while((get_time() - start) < ms)
+		usleep(100);
+}
+
 static void    eat(t_philo *philo)
 {
-    if (philo->data->num_philos == 1)
-    {
-        pthread_mutex_lock(philo->left_fork);
-        print_status(philo, "has taken a fork");
-        usleep(philo->data->time_to_die * 1000);
-        pthread_mutex_unlock(philo->left_fork);
-        return ;
-    }
+	if (philo->data->num_philos == 1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		print_status(philo, "has taken a fork");
+		usleep_but_better(philo->data->time_to_die);
+		pthread_mutex_unlock(philo->left_fork);
+		return ;
+	}
     if (philo->id % 2 == 0)
     {
         pthread_mutex_lock(philo->right_fork);
@@ -41,7 +50,7 @@ static void    eat(t_philo *philo)
     philo->meals_eaten++;
     pthread_mutex_unlock(&philo->meal_mutex);
     print_status(philo, "is eating");
-    usleep(philo->data->time_to_eat * 1000);
+    usleep_but_better(philo->data->time_to_eat);
     pthread_mutex_unlock(philo->left_fork);
     pthread_mutex_unlock(philo->right_fork);
 }
@@ -53,10 +62,10 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	while(!is_dead(philo->data))
 	{
-		print_status(philo, "is thinking");
 		eat(philo);
 		print_status(philo, "is sleeping");
-		usleep(philo->data->time_to_sleep * 1000);
+		usleep_but_better(philo->data->time_to_sleep);
+		print_status(philo, "is thinking");
 	}
 	return NULL;
 }
@@ -70,7 +79,11 @@ void	*monitor_routine(void *arg)
 	{
 		if(death_check(data) || did_eat_all(data))
 			return NULL;
-		usleep(1000);
+		usleep_but_better(500);
 	}
 	return NULL;
 }
+
+
+//fix thinking stuff
+//after die program keeps print it should stop
